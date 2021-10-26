@@ -6,10 +6,12 @@ Docker image with esp-open-sdk toolchain
 * pulling:
 
   ```
-  docker pull 3mdeb/esp-open-sdk
+  docker pull ghcr.io/Unit-e/esp-open-sdk
   ```
 
 * running:
+
+(on linux. TODO: update windows instructions. serial ports WONT WORK on Docker+Windows+WSL2 (which is the default))
 
 So far this container was used for building
 [esp-open-rtos](https://github.com/SuperHouse/esp-open-rtos) projects
@@ -18,7 +20,7 @@ So far this container was used for building
   git clone --recursive https://github.com/Superhouse/esp-open-rtos.git
   cd esp-open-rtos
   docker run -it --device=/dev/ttyUSB0 -v ${PWD}:/home/build \
-      3mdeb/esp-open-sdk make flash -C examples/blink ESPPORT=/dev/ttyUSB0
+      Unit-e/esp-open-sdk make flash -C examples/blink ESPPORT=/dev/ttyUSB0
   ```
 
 In case of access errors such as:
@@ -45,7 +47,7 @@ advised.
 * building:
 
   ```
-  git clone git@github.com:3mdeb/esp-open-sdk-docker.git
+  git clone git@github.com:Unit-e/esp-open-sdk-docker.git
   cd esp-opensdk-docker
-  docker build -t 3mdeb/esp-open-sdk .
+  docker build -t Unit-e/esp-open-sdk .
   ```
