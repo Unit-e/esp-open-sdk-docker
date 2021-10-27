@@ -17,7 +17,8 @@ RUN apt-get update && apt-get upgrade -y && \
     python2 \
     python3 \
     python3-serial \
-    bash
+    bash \
+    curl
 
 # python2 stuff is for esptool.py
 RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py && python2 get-pip.py && pip2 install pyserial && rm -f get-pip.py
@@ -53,8 +54,7 @@ RUN apt-get update && apt-get upgrade -y && \
     wget \
     bzip2 \
     libtool-bin \
-    patch \
-    curl
+    patch
 
 RUN pip install --upgrade pip
 
