@@ -17,6 +17,7 @@ RUN apt-get update && apt-get upgrade -y && \
     python2 \
     python3 \
     python3-serial \
+    ca-certificates \
     bash \
     curl
 
