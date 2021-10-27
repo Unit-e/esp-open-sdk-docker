@@ -93,10 +93,12 @@ RUN apt-get update && apt-get upgrade -y && \
 
 RUN useradd --uid 1000 build
 
-USER build
 COPY --from=esp-opensdk-builder /opt/esp-open-sdk /opt/esp-open-sdk
+RUN mkdir -p /opt/esp-open-sdk/esptool/ && \
+    ln -s /opt/esp-open-sdk/xtensa-lx106-elf/bin/esptool.py /opt/esp-open-sdk/esptool/esptool.py && \
+    chown -R root:root /opt/esp-open-sdk/
 
-RUN mkdir -p /opt/esp-open-sdk/esptool/ && ln -s /opt/esp-open-sdk/xtensa-lx106-elf/bin/esptool.py /opt/esp-open-sdk/esptool/esptool.py
+USER build
 
 WORKDIR /home/build
 ENV PATH="/opt/esp-open-sdk/xtensa-lx106-elf/bin:${PATH}"
