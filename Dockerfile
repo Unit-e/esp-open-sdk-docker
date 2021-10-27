@@ -11,10 +11,12 @@ ARG MAKEFLAGS=-j$(nproc)
 ARG REMOVE_SDK_BUILD_DIR=1
 ARG DEBIAN_FRONTEND=noninteractive
 
+# the 'python-is-python2' package makes /usr/bin/python be python2 (needed for esptool)
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
     make \
     python2 \
+    python-is-python2 \
     python3 \
     python3-serial \
     ca-certificates \
@@ -44,7 +46,6 @@ RUN apt-get update && apt-get upgrade -y && \
     gawk \
     ncurses-dev \
     libexpat-dev \
-    python-is-python3 \
     python3-dev \
     python3-pip \
     python3-setuptools \
@@ -100,5 +101,5 @@ RUN mkdir -p /opt/esp-open-sdk/esptool/ && \
 
 USER build
 
-WORKDIR /home/build
+WORKDIR /home/build/src/
 ENV PATH="/opt/esp-open-sdk/xtensa-lx106-elf/bin:${PATH}"
