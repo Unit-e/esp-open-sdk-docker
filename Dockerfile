@@ -70,7 +70,7 @@ RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py && \
 #  use esp_rfc2217_server.exe from espressif on windows to forward serial port over the network from docker->windows host.
 #  this shoudl work OK with docker running on virtualbox though)
 RUN useradd --uid 1000 build && \
-    usermod -a -G dialout build \
+    usermod -a -G dialout build && \
     mkdir -p ${SDK_HOME} && \
     chown -R 1000:1000 /home/build/
 
