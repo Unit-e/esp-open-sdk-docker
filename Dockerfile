@@ -29,6 +29,7 @@ RUN apt-get update && apt-get upgrade -y && \
     gcc \
     git \
     gperf \
+    gzip \
     help2man \
     install-info \
     libexpat-dev \
@@ -46,6 +47,7 @@ RUN apt-get update && apt-get upgrade -y && \
     python3-serial \
     python3-setuptools \
     sed \
+    tar \
     texinfo \
     unrar-free \
     unzip \
