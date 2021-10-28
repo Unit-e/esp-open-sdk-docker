@@ -52,6 +52,7 @@ RUN apt-get update && apt-get upgrade -y && \
     unrar-free \
     unzip \
     wget \
+    xz-utils \
     ${OPTIONAL_HELPFUL_UTILS_FOR_INTERACTIVE_USE}
 
 RUN pip install --upgrade pip
