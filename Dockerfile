@@ -94,7 +94,7 @@ FROM esp-cnlohr-esp82xx-base as esp-cnlohr-esp82xx
 
 USER root
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get install -y --no-install-recommends && \
+RUN apt-get install -y --no-install-recommends \
     sudo \
     iputils-ping \
     dnsutils
