@@ -3,9 +3,11 @@
 ARG MAKEFLAGS=-j$(nproc)
 FROM ubuntu:20.04 as esp-cnlohr-esp82xx-base
 
-# technically, don't need this for projects using esp82xx since they assume this is the default path.
- # but, won't hurt anything to have it here.
-ENV ESP_ROOT="/home/build/esp8266"
+ARG SDK_HOME="/home/build/esp8266"
+
+# note: I think you can also change this to be /home/build/esp8266/ESP8266_NONOS_SDK (this is not the default).
+# also, user makefiles can override if they like.
+ENV ESP_ROOT="${SDK_HOME}/esp-open-sdk"
 
 USER root
 
@@ -60,7 +62,7 @@ RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py && \
     rm -f get-pip.py
 
 RUN useradd --uid 1000 build && \
-    mkdir -p ${ESP_ROOT} && \
+    mkdir -p ${SDK_HOME} && \
     chown -R 1000:1000 /home/build/
 
 # esp-open-sdk build must NOT be performed by root.
@@ -72,15 +74,15 @@ USER build
 #
 # "This will install the SDK to ~/esp8266 - the default location for the ESP8266 SDK. This only works on 64-bit x86 systems, 
 #  and has only been verified in Linux Mint and Ubuntu. Installation is about 18MB and requires about 90 MB of disk space."
-RUN mkdir -p ${ESP_ROOT} && \
-    cd ${ESP_ROOT} && \
+RUN mkdir -p ${SDK_HOME} && \
+    cd ${SDK_HOME} && \
     wget https://github.com/cnlohr/esp82xx_bin_toolchain/raw/master/esp-open-sdk-x86_64-20200810.tar.xz && \
     tar xJvf esp-open-sdk-x86_64-20200810.tar.xz && \
     rm -f esp-open-sdk-x86_64-20200810.tar.xz
 
 # "Several esp82xx projects use the offical Espressif nonos SDK instead of the bundled one here. 
 #  You should probably install that to your home folder using the following commands:"
-RUN cd ${ESP_ROOT} && \
+RUN cd ${SDK_HOME} && \
     git clone https://github.com/espressif/ESP8266_NONOS_SDK --recurse-submodules
 
 WORKDIR /home/build/src/
