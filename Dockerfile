@@ -1,15 +1,13 @@
 # modified version for building these steps: https://github.com/cnlohr/esp82xx
 
-FROM ubuntu:20.04 as esp-cnlohr-esp82xx
 ARG MAKEFLAGS=-j$(nproc)
 ARG DEBIAN_FRONTEND=noninteractive
 
- # technically, don't need this for projects using esp82xx since they assume this is the default path.
+FROM ubuntu:20.04 as esp-cnlohr-esp82xx-base
+
+# technically, don't need this for projects using esp82xx since they assume this is the default path.
  # but, won't hurt anything to have it here.
 ENV ESP_ROOT="/home/build/esp8266"
-
-# some extra junk that's useful if you're interactively poking around in the container via 'docker exec'
-ARG OPTIONAL_HELPFUL_UTILS_FOR_INTERACTIVE_USE=sudo iputils-ping dnsutils
 
 USER root
 
@@ -52,8 +50,7 @@ RUN apt-get update && apt-get upgrade -y && \
     unrar-free \
     unzip \
     wget \
-    xz-utils \
-    ${OPTIONAL_HELPFUL_UTILS_FOR_INTERACTIVE_USE}
+    xz-utils
 
 RUN pip install --upgrade pip
 
@@ -63,13 +60,9 @@ RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py && \
     pip2 install pyserial && \
     rm -f get-pip.py
 
-# sudo stuff is not needed for the build. 
-# it's optional, just useful when interactively logged into the container.
-RUN useradd --uid 1000 build && \
+RUN useradd --disabled-password --gecos '' --uid 1000 build && \
     mkdir -p ${ESP_ROOT} && \
-    chown -R 1000:1000 /home/build/ && \
-    \
-    usermod -aG sudo build
+    chown -R 1000:1000 /home/build/
 
 # esp-open-sdk build must NOT be performed by root.
 # probably doesn't matter too much for esp82xx, but, good practice anyway.
@@ -94,3 +87,20 @@ RUN cd ${ESP_ROOT} && \
 WORKDIR /home/build/src/
 
 ENV PATH="${ESP_ROOT}/xtensa-lx106-elf/bin:${PATH}"
+
+
+# some extra junk that's useful if you're interactively poking around in the container via 'docker exec'.
+# if you want the more barebones version, use the base
+FROM esp-cnlohr-esp82xx-base as esp-cnlohr-esp82xx
+
+USER root
+RUN apt-get install -y --no-install-recommends && \
+    sudo \
+    iputils-ping \
+    dnsutils
+
+RUN adduser -aG sudo build && \
+    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+USER build
+RUN echo "alias ls='ls --color=auto'" >> ~/.bash_profile
