@@ -62,7 +62,15 @@ RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py && \
     pip2 install pyserial && \
     rm -f get-pip.py
 
+
+# setup new user "build" and home dirs.
+# 
+# Note: dialout stuff: allow use of serial port /dev/ttyUSB* 
+# (important note: Oct 2021: host serial port access doesn't work on windows with WSL2, i.e. docker desktop on windows.
+#  use esp_rfc2217_server.exe from espressif on windows to forward serial port over the network from docker->windows host.
+#  this shoudl work OK with docker running on virtualbox though)
 RUN useradd --uid 1000 build && \
+    usermod -a -G dialout build \
     mkdir -p ${SDK_HOME} && \
     chown -R 1000:1000 /home/build/
 
@@ -89,12 +97,6 @@ RUN cd ${SDK_HOME} && \
 WORKDIR /home/build/src/
 
 ENV PATH="${ESP_ROOT}/xtensa-lx106-elf/bin:${PATH}"
-
-# allow use of serial port /dev/ttyUSB* 
-# (important note: Oct 2021: host serial port access doesn't work on windows with WSL2, i.e. docker desktop on windows.
-#  use esp_rfc2217_server.exe from espressif on windows to forward serial port over the network from docker->windows host.
-#  this shoudl work OK with docker running on virtualbox though)
-RUN usermod -a -G dialout build
 
 # some extra junk that's useful if you're interactively poking around in the container via 'docker exec'.
 # if you want the more barebones version, use the base
