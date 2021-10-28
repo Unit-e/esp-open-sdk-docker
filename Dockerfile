@@ -1,8 +1,6 @@
 # modified version for building these steps: https://github.com/cnlohr/esp82xx
 
 ARG MAKEFLAGS=-j$(nproc)
-ARG DEBIAN_FRONTEND=noninteractive
-
 FROM ubuntu:20.04 as esp-cnlohr-esp82xx-base
 
 # technically, don't need this for projects using esp82xx since they assume this is the default path.
@@ -12,6 +10,7 @@ ENV ESP_ROOT="/home/build/esp8266"
 USER root
 
 # the 'python-is-python2' package makes /usr/bin/python be python2 (needed for esptool)
+ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
     autoconf \
@@ -94,6 +93,7 @@ ENV PATH="${ESP_ROOT}/xtensa-lx106-elf/bin:${PATH}"
 FROM esp-cnlohr-esp82xx-base as esp-cnlohr-esp82xx
 
 USER root
+ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get install -y --no-install-recommends && \
     sudo \
     iputils-ping \
