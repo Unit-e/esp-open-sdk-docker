@@ -85,12 +85,16 @@ FROM esp-opensdk-base as esp-openrtos-builder
 LABEL author="Maciej Pijanowski <maciej.pijanowski@3mdeb.com>"
 LABEL author2="Dominic Cerquetti <dom at cerquetti dot solutions>"
 
+# gcc and libusb-dev needed for stuff in web/ folder in LSC
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
     make \
     python3 \
     python3-serial \
-    bash
+    bash \
+    gcc \
+    g++ \
+    libusb-1.0-0-dev
 
 RUN useradd --uid 1000 build
 
