@@ -59,7 +59,7 @@ RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py && \
     pip2 install pyserial && \
     rm -f get-pip.py
 
-RUN useradd --disabled-password --gecos '' --uid 1000 build && \
+RUN useradd --uid 1000 build && \
     mkdir -p ${ESP_ROOT} && \
     chown -R 1000:1000 /home/build/
 
@@ -99,8 +99,7 @@ RUN apt-get install -y --no-install-recommends && \
     iputils-ping \
     dnsutils
 
-RUN adduser -aG sudo build && \
-    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+RUN usermod -a -G sudo build && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 USER build
 RUN echo "alias ls='ls --color=auto'" >> ~/.bash_profile
