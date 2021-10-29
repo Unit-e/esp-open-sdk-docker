@@ -52,7 +52,8 @@ RUN apt-get update && apt-get upgrade -y && \
     unrar-free \
     unzip \
     wget \
-    xz-utils
+    xz-utils \
+    zip
 
 RUN pip install --upgrade pip
 
