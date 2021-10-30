@@ -112,5 +112,10 @@ RUN apt-get install -y --no-install-recommends \
 
 RUN usermod -a -G sudo build && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
+# LITERALLY ONLY EXISTS FOR GITHUB ACTIONS. probably should make this configurable. pretty horrible hack.
+# in github actions, the user is 'runner' which is uid=1001.  the volume mounted into the container is this UID, so make our user be that uid.
+# ugh. woof.
+RUN usermod -u 1001 build
+
 USER build
-RUN echo "alias ls='ls --color=auto'" >> ~/.bash_profile
+RUN echo "alias ls='ls --color=auto'" >> ~/.bashrc
