@@ -11,7 +11,11 @@ ENV ESP_ROOT="${SDK_HOME}/esp-open-sdk"
 
 USER root
 
-# the 'python-is-python2' package makes /usr/bin/python be python2 (needed for esptool)
+# the 'python-is-python2' package makes /usr/bin/python be python2 (needed for esptool.py in the SDK)
+# 
+# the 'esptool' package is for a DIFFERENT and newer version of esptool than what comes bundled in ESP_ROOT
+# makes flashing more accurate
+# 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
@@ -22,6 +26,7 @@ RUN apt-get update && apt-get upgrade -y && \
     bzip2 \
     ca-certificates \
     curl \
+    esptool \
     flex \
     g++ \
     gawk \
