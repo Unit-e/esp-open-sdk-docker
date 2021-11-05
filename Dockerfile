@@ -68,14 +68,8 @@ RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py && \
     rm -f get-pip.py
 
 # install very latest esptool though, unrelated to SDK
-RUN cd /tmp && \
-    wget https://github.com/espressif/esptool/releases/download/v3.2/esptool-v3.2-linux-amd64.zip && \
-    unzip esptool-v3.2-linux-amd64.zip && \
-    cd esptool-v3.2-linux-amd64 && \
-    chmod a+x ./esp* && \
-    mkdir -p /usr/local/bin/ && \
-    cp ./esp* /usr/local/bin/ && \
-    rm /tmp/esptool-v3.2-linux-amd64.zip
+# this will go in /usr/local/bin/esptool.py
+RUN sudo pip3 install --upgrade pyserial esptool
 
 # setup new user "build" and home dirs.
 # 
