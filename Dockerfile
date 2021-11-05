@@ -26,7 +26,6 @@ RUN apt-get update && apt-get upgrade -y && \
     bzip2 \
     ca-certificates \
     curl \
-    esptool \
     flex \
     g++ \
     gawk \
@@ -62,12 +61,21 @@ RUN apt-get update && apt-get upgrade -y && \
 
 RUN pip install --upgrade pip
 
-# python2 stuff is for esptool.py. (sigh... python2+ubuntu.... why u so difficult)
+# python2 stuff is for SDK's version of esptool.py. (sigh... python2+ubuntu.... why u so difficult)
 RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py && \
     python2 get-pip.py && \
     pip2 install pyserial && \
     rm -f get-pip.py
 
+# install very latest esptool though, unrelated to SDK
+RUN cd /tmp && \
+    wget https://github.com/espressif/esptool/releases/download/v3.2/esptool-v3.2-linux-amd64.zip && \
+    unzip esptool-v3.2-linux-amd64.zip && \
+    cd esptool-v3.2-linux-amd64 && \
+    chmod a+x ./esp* && \
+    mkdir -p /usr/local/bin/ && \
+    cp ./esp* /usr/local/bin/ && \
+    rm /tmp/esptool-v3.2-linux-amd64.zip
 
 # setup new user "build" and home dirs.
 # 
