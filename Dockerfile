@@ -69,7 +69,7 @@ RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py && \
 
 # install very latest esptool though, unrelated to SDK
 # this will go in /usr/local/bin/esptool.py
-RUN sudo pip3 install --upgrade pyserial esptool
+RUN pip3 install --upgrade pyserial esptool
 
 # setup new user "build" and home dirs.
 # 
